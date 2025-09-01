@@ -39,7 +39,7 @@
         }
 
         /* ==========================================================================
-           2. ESTILOS DE LA PANTALLA DE INICIO (LANDING) - AJUSTES FINOS
+           2. ESTILOS DE LA PANTALLA DE INICIO (LANDING)
            ========================================================================== */
         #landing-screen {
             display: flex;
@@ -53,20 +53,20 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-evenly; /* Distribuye el espacio verticalmente */
+            justify-content: space-evenly;
             width: 100%;
             height: 100%;
         }
 
         .logo {
-            width: 30vh; /* Un poco más grande */
+            width: 30vh;
             max-width: 220px;
             min-width: 150px;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
         }
 
         .landing-title {
-            font-size: clamp(2rem, 6vh, 3rem); /* Texto del título más pequeño */
+            font-size: clamp(2rem, 6vh, 3rem);
             line-height: 1.2;
             text-align: center;
         }
@@ -76,7 +76,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 1.5vh; /* Más juntos */
+            gap: 1.5vh;
             width: 100%;
         }
 
@@ -86,8 +86,8 @@
             align-items: center;
             justify-content: center;
             width: 90vw;
-            max-width: 600px; /* Botellas más grandes */
-            height: 30vh;     /* Botellas más altas */
+            max-width: 600px;
+            height: 30vh;
             max-height: 220px;
             cursor: pointer;
             transition: transform 0.3s ease-out;
@@ -107,10 +107,6 @@
             transform-origin: center;
             transform: translate(-50%, -50%) rotate(90deg);
         }
-        
-        .bottle-button.flipped .bottle-svg {
-            transform: translate(-50%, -50%) rotate(-90deg);
-        }
 
         .bottle-outline {
             stroke: var(--color-primary);
@@ -124,7 +120,6 @@
             transform: scaleX(0);
             transition: transform 0.4s ease-in-out;
         }
-        .bottle-button.flipped .bottle-fill { transform-origin: right; }
         .bottle-button:hover .bottle-fill { transform: scaleX(1); }
         .bottle-gloss {
             fill: rgba(255, 255, 255, 0.15);
@@ -138,31 +133,18 @@
             z-index: 10;
             color: var(--color-text-primary);
             font-family: var(--font-display);
-            font-size: clamp(1.2rem, 4.5vh, 2rem); /* Texto de botón más chico */
+            font-size: clamp(1.2rem, 4.5vh, 2rem);
             font-weight: 700;
-            padding: 0 20%; /* Asegura que el texto no toque los bordes */
-            white-space: nowrap; /* Evita que el texto se parta en dos líneas */
+            white-space: nowrap;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             transition: color 0.3s ease;
         }
         .bottle-button:hover .button-text { color: var(--color-text-dark); }
 
-        /* En pantallas de escritorio, los botones se ponen al lado */
         @media (min-width: 768px) and (min-height: 600px) {
-            .landing-container {
-                 justify-content: center; /* Centrado clásico en desktop */
-                 gap: 5vh;
-            }
-            .button-container { 
-                flex-direction: row;
-                gap: 2rem;
-            }
-            .bottle-button {
-                width: 45vw;
-                max-width: 450px;
-                height: 30vh;
-                max-height: 220px;
-            }
+            .landing-container { justify-content: center; gap: 5vh; }
+            .button-container { flex-direction: row; gap: 2rem; }
+            .bottle-button { width: 45vw; max-width: 450px; height: 30vh; max-height: 220px; }
         }
 
 
@@ -220,7 +202,7 @@
         .slider {
             -webkit-appearance: none; appearance: none;
             position: absolute; width: 250px; height: 20px;
-            left: 35px; top: 260px; /* MODIFICADO: Rango y centrado del corcho corregidos */
+            left: 35px; top: 260px;
             background: transparent; outline: none; cursor: pointer;
             transform-origin: 0 0;
             transform: rotate(-90deg);
@@ -229,17 +211,17 @@
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 30px; /* Ancho del corcho */
-            height: 22px; /* Alto del corcho */
+            width: 30px;
+            height: 22px;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 22"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%23E6CBAF"/><stop offset="20%" stop-color="%23C2A583"/><stop offset="80%" stop-color="%23A88B6D"/><stop offset="100%" stop-color="%23C2A583"/></linearGradient></defs><rect width="32" height="22" rx="6" fill="url(%23g)" stroke="%2375614d" stroke-width="1"/><ellipse cx="16" cy="11" rx="12" ry="4" fill="rgba(0,0,0,0.05)"/><ellipse cx="16" cy="11" rx="8" ry="2" fill="rgba(255,255,255,0.1)"/></svg>');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
             border: none;
             cursor: pointer;
-            margin-top: -1px; /* Ajuste vertical */
+            margin-top: -1px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-            transform: rotate(2deg); /* AÑADIDO: Inclinación leve */
+            transform: rotate(2deg);
         }
 
         .slider::-moz-range-thumb {
@@ -252,7 +234,7 @@
             border: none;
             cursor: pointer;
             box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-            transform: rotate(2deg); /* CORREGIDO: Inclinación consistente */
+            transform: rotate(2deg);
         }
 
         .value-display {
@@ -333,6 +315,7 @@
             margin-top: 0.5rem;
             color: var(--color-text-primary);
             opacity: 0.9;
+            word-wrap: break-word;
         }
         .modal-close-button {
             margin-top: 1.5rem;
@@ -352,22 +335,21 @@
 </head>
 <body>
 
+    <!-- SVG DEFINITIONS -->
     <svg width="0" height="0" style="position:absolute">
         <defs>
             <path id="new-bottle-path" d="M 50 2 C 45 2 40 10 40 25 L 40 160 C 20 170 15 185 15 200 L 15 370 C 15 378 22 385 30 385 L 110 385 C 118 385 125 378 125 370 L 125 200 C 125 185 120 170 100 160 L 100 25 C 100 10 95 2 90 2 L 50 2 Z" />
             <clipPath id="new-bottle-clip"><use href="#new-bottle-path"/></clipPath>
-            
             <text id="bottle-brand-text" x="70" y="310" font-family="Cinzel, serif" font-size="24" font-weight="700" fill="rgba(255, 255, 255, 0.3)" text-anchor="middle" letter-spacing="2">SKÖL</text>
-
             <linearGradient id="wineFillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" style="stop-color: var(--color-primary-light); stop-opacity:1" />
                 <stop offset="100%" style="stop-color: var(--color-primary); stop-opacity:1" />
             </linearGradient>
-
             <path id="bottle-gloss-path" d="M 65 35 Q 80 80 70 150 L 55 150 Q 70 80 55 35 Z" transform="translate(5, 5) scale(0.9)" />
         </defs>
     </svg>
 
+    <!-- PANTALLA DE INICIO -->
     <div id="landing-screen">
         <div class="landing-container">
             <img src="logoskol.jpeg" alt="Logo Sköl Vinoteca" class="logo">
@@ -385,6 +367,7 @@
         </div>
     </div>
 
+    <!-- PANTALLA DE CATA -->
     <div id="tasting-screen">
          <div class="survey-card p-4 sm:p-6 md:p-10">
             <button id="back-to-home" title="Volver al inicio">
@@ -405,7 +388,8 @@
                     <label for="wine-selector" class="block text-sm font-medium text-[var(--color-primary)] mb-1">Seleccionar Vino</label>
                     <select id="wine-selector" class="form-input w-full p-2">
                         <option value="" selected disabled>Elige un vino de la lista...</option>
-                        </select>
+                        <!-- Las opciones se agregarán con JavaScript -->
+                    </select>
                 </div>
             </section>
             
@@ -471,6 +455,7 @@
         </div>
     </div>
     
+    <!-- VENTANA MODAL PARA NOTIFICACIONES -->
     <div id="notification-modal" class="hidden">
         <div class="modal-content">
             <div id="modal-icon-container"></div>
@@ -482,7 +467,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         // --- NAVEGACIÓN ENTRE PANTALLAS ---
         const landingScreen = document.getElementById('landing-screen');
@@ -515,9 +500,9 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         let userId = null;
-        let currentWineType = 'Tinto'; // Variable para guardar el tipo de vino actual
+        let currentWineType = 'Tinto';
 
-        onAuthStateChanged(auth, (user) => { if (user) userId = user.uid; });
+        auth.onAuthStateChanged((user) => { if (user) userId = user.uid; });
 
         async function authenticateUser() {
             try {
@@ -617,7 +602,6 @@
             });
         });
         
-        // --- LÓGICA DE SELECCIÓN DE VINO ---
         const wineSelector = document.getElementById('wine-selector');
 
         const fictitiousWines = [
@@ -655,7 +639,6 @@
 
         // --- LÓGICA DE ENVÍO A GOOGLE SHEETS ---
         const submitButton = document.getElementById('submit-button');
-        // VITAL: Reemplaza la siguiente URL por la URL de tu Web App de Google Apps Script.
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVuZWxgUoxUad42o3y-OUqeZhoinsetiEHzRvdBSEQ1Cen3lKd8Xbaxn6eBweRAjo4FQ/exec';
                             
         submitButton.addEventListener('click', async () => {
@@ -709,10 +692,9 @@
                     body: JSON.stringify({tastingData})
                 });
 
-                 // --- BLOQUE MODIFICADO PARA MEJOR MANEJO DE ERRORES ---
                 const result = await response.json();
 
-                if (response.ok) {
+                if (response.ok && result.result === 'success') {
                     showNotification('success', '¡Cata Enviada!', 'Muchas gracias por participar. Tus resultados han sido enviados.');
                     
                     document.getElementById('tasting-screen').querySelector('.survey-card').scrollTop = 0;
@@ -733,9 +715,7 @@
                         showScreen(landingScreen);
                     }, 3000);
                 } else {
-                     // Si la respuesta no es OK o el script reportó un error, lanzamos un error con el mensaje del script
-                     throw new Error(result.error || 'Falló la respuesta del servidor. Revisa los permisos del script.');
-                     throw new Error('Falló la respuesta del servidor.');
+                     throw new Error(result.error || 'La respuesta del servidor no fue exitosa. Revisa los permisos del script.');
                 }
 
             } catch (e) {
@@ -782,5 +762,3 @@
 </body>
 </html>
 
-
-}
