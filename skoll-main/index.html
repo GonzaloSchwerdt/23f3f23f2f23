@@ -719,9 +719,9 @@
                 }
 
             } catch (e) {
-                console.error("Error sending data to Google Sheet: ", e, e.stack);
-                showNotification('error', 'Error de Envío', e.message || 'Ocurrió un error');
-                }
+                console.error("Error sending data to Google Sheet: ", e);
+                showNotification('error', 'Error de Envío', e.message || 'Ocurrió un error. Revisa la consola del navegador para más detalles.');
+                
             } finally {
                 submitButton.disabled = false;
                 submitButton.textContent = 'Enviar Cata';
@@ -762,6 +762,7 @@
     </script>
 </body>
 </html>
+
 
 
 
