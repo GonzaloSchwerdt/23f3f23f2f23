@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sköl Vinoteca - App de Cata</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ==========================================================================
+           1. VARIABLES Y ESTILOS BASE
+           ========================================================================== */
+        :root {
+            --color-background: #261a12;
+            --color-surface: #5c4a3b;
+            --color-primary: #c09a56;
+            --color-primary-light: #d4b06a;
+            --color-text-primary: #f0e6da;
+            --color-text-dark: #261a12;
+            --font-serif: 'Lora', serif;
+            --font-display: 'Cinzel', serif; /* Nueva tipografía para títulos */
+        }
+
+        body {
+            font-family: var(--font-serif);
+            background-color: var(--color-background);
+            background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+            color: var(--color-text-primary);
+            height: 100vh;
+            overflow: hidden; /* Previene el scroll en toda la app */
+        }
+        
+        .app-title {
+            font-family: var(--font-display);
+            color: var(--color-primary);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+
+        /* ==========================================================================
+           2. ESTILOS DE LA PANTALLA DE INICIO (LANDING) - AJUSTES FINOS
+           ========================================================================== */
+        #landing-screen {
+            display: flex;
+            height: 100vh;
+            padding: 1rem;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            box-sizing: border-box;
+        }
+        
+        .landing-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly; /* Distribuye el espacio verticalmente */
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo {
+            width: 30vh; /* Un poco más grande */
+            max-width: 220px;
+            min-width: 150px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
+        }
+
+        .landing-title {
+            font-size: clamp(2rem, 6vh, 3rem); /* Texto del título más pequeño */
+            line-height: 1.2;
+            text-align: center;
+        }
+        
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5vh; /* Más juntos */
+            width: 100%;
+        }
+
+        .bottle-button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90vw;
+            max-width: 600px; /* Botellas más grandes */
+            height: 30vh;     /* Botellas más altas */
+            max-height: 220px;
+            cursor: pointer;
+            transition: transform 0.3s ease-out;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
+        }
+        .bottle-button:hover {
+            transform: scale(1.03);
+            filter: drop-shadow(0 14px 28px rgba(0,0,0,0.6));
+        }
+
+        .bottle-svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 105%;
+            height: 105%;
+            transform-origin: center;
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+        
+        .bottle-button.flipped .bottle-svg {
+            transform: translate(-50%, -50%) rotate(-90deg);
+        }
+
+        .bottle-outline {
+            stroke: var(--color-primary);
+            stroke-width: 8; 
+            fill: rgba(0,0,0,0.4);
+            transition: fill 0.3s;
+        }
+        .bottle-fill {
+            fill: url(#wineFillGradient);
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 0.4s ease-in-out;
+        }
+        .bottle-button.flipped .bottle-fill { transform-origin: right; }
+        .bottle-button:hover .bottle-fill { transform: scaleX(1); }
+        .bottle-gloss {
+            fill: rgba(255, 255, 255, 0.15);
+            opacity: 0.5;
+            transition: opacity 0.4s ease;
+        }
+        .bottle-button:hover .bottle-gloss { opacity: 1; }
+
+        .button-text {
+            position: relative;
+            z-index: 10;
+            color: var(--color-text-primary);
+            font-family: var(--font-display);
+            font-size: clamp(1.2rem, 4.5vh, 2rem); /* Texto de botón más chico */
+            font-weight: 700;
+            padding: 0 20%; /* Asegura que el texto no toque los bordes */
+            white-space: nowrap; /* Evita que el texto se parta en dos líneas */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            transition: color 0.3s ease;
+        }
+        .bottle-button:hover .button-text { color: var(--color-text-dark); }
+
+        /* En pantallas de escritorio, los botones se ponen al lado */
+        @media (min-width: 768px) and (min-height: 600px) {
+            .landing-container {
+                 justify-content: center; /* Centrado clásico en desktop */
+                 gap: 5vh;
+            }
+            .button-container { 
+                flex-direction: row;
+                gap: 2rem;
+            }
+            .bottle-button {
+                width: 45vw;
+                max-width: 450px;
+                height: 30vh;
+                max-height: 220px;
+            }
+        }
+
+
+        /* ==========================================================================
+           3. ESTILOS DE LA PANTALLA DE CATA (TASTING)
+           ========================================================================== */
+        #tasting-screen {
+            height: 100vh;
+            display: none; /* Inicia oculto */
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+        }
+        .survey-card {
+            background-color: var(--color-surface);
+            border: 1px solid #8b7a6b;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+            border-radius: 1rem;
+            width: 100%;
+            max-width: 64rem;
+            position: relative;
+            max-height: 95vh;
+            overflow-y: auto; /* Scroll si el contenido es mucho */
+        }
+        .aspect-label {
+            font-family: var(--font-display);
+            color: var(--color-primary);
+        }
+        .form-input, .form-radio {
+            background-color: #4a3e35;
+            border: 1px solid #8b7a6b;
+            color: var(--color-text-primary);
+            border-radius: 0.5rem;
+        }
+        .form-radio {
+            color: var(--color-primary);
+        }
+        .form-radio:checked {
+             background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+        }
+        .bottle-container {
+            position: relative;
+            width: 90px;
+            height: 280px;
+            margin: 0 auto;
+        }
+        .wine-bottle-svg {
+            width: 100%; height: 100%;
+            position: absolute; bottom: 0; left: 0;
+        }
+        .bottle-fill-svg {
+            transition: all 0.2s ease-out;
+        }
+        .slider {
+            -webkit-appearance: none; appearance: none;
+            position: absolute; width: 250px; height: 20px;
+            left: 35px; top: 260px; /* MODIFICADO: Rango y centrado del corcho corregidos */
+            background: transparent; outline: none; cursor: pointer;
+            transform-origin: 0 0;
+            transform: rotate(-90deg);
+        }
+        /* ESTILO DEL CORCHO PARA EL SLIDER */
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px; /* Ancho del corcho */
+            height: 22px; /* Alto del corcho */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 22"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%23E6CBAF"/><stop offset="20%" stop-color="%23C2A583"/><stop offset="80%" stop-color="%23A88B6D"/><stop offset="100%" stop-color="%23C2A583"/></linearGradient></defs><rect width="32" height="22" rx="6" fill="url(%23g)" stroke="%2375614d" stroke-width="1"/><ellipse cx="16" cy="11" rx="12" ry="4" fill="rgba(0,0,0,0.05)"/><ellipse cx="16" cy="11" rx="8" ry="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            cursor: pointer;
+            margin-top: -1px; /* Ajuste vertical */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            transform: rotate(2deg); /* AÑADIDO: Inclinación leve */
+        }
+
+        .slider::-moz-range-thumb {
+            width: 30px;
+            height: 22px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 22"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="%23E6CBAF"/><stop offset="20%" stop-color="%23C2A583"/><stop offset="80%" stop-color="%23A88B6D"/><stop offset="100%" stop-color="%23C2A583"/></linearGradient></defs><rect width="32" height="22" rx="6" fill="url(%23g)" stroke="%2375614d" stroke-width="1"/><ellipse cx="16" cy="11" rx="12" ry="4" fill="rgba(0,0,0,0.05)"/><ellipse cx="16" cy="11" rx="8" ry="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+            transform: rotate(2deg); /* CORREGIDO: Inclinación consistente */
+        }
+
+        .value-display {
+            font-family: var(--font-display); color: var(--color-text-dark); background-color: var(--color-primary);
+            padding: 2px 10px; border-radius: 5px; font-size: 1.25rem;
+        }
+        .descriptor-tag {
+            cursor: pointer; background-color: #4a3e35; border: 1px solid #8b7a6b;
+            padding: 0.25rem 0.75rem; border-radius: 9999px; transition: all 0.2s; font-size: 0.8rem;
+        }
+        .descriptor-tag:hover {
+            background-color: var(--color-primary); color: var(--color-text-dark); border-color: var(--color-primary);
+        }
+
+        /* ==========================================================================
+           4. UTILIDADES Y OTROS
+           ========================================================================== */
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.98);
+        }
+        #back-to-home {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 20;
+            background-color: rgba(192, 154, 86, 0.2);
+            border: 1px solid var(--color-primary);
+            color: var(--color-primary);
+            border-radius: 50%;
+            width: 40px; height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s;
+        }
+        #back-to-home:hover {
+            background-color: var(--color-primary); color: var(--color-text-dark); transform: scale(1.1);
+        }
+
+        /* ESTILOS PARA LA VENTANA MODAL DE NOTIFICACIÓN */
+        #notification-modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-primary);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        #notification-modal:not(.hidden) .modal-content {
+            transform: scale(1);
+        }
+        .modal-icon {
+            width: 60px; height: 60px;
+            margin: 0 auto 1.5rem;
+        }
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            color: var(--color-text-primary);
+        }
+        .modal-message {
+            margin-top: 0.5rem;
+            color: var(--color-text-primary);
+            opacity: 0.9;
+        }
+        .modal-close-button {
+            margin-top: 1.5rem;
+            background-color: var(--color-primary);
+            color: var(--color-text-dark);
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .modal-close-button:hover {
+            background-color: var(--color-primary-light);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SVG DEFINITIONS -->
+    <svg width="0" height="0" style="position:absolute">
+        <defs>
+            <!-- Forma de la Botella -->
+            <path id="new-bottle-path" d="M 50 2 C 45 2 40 10 40 25 L 40 160 C 20 170 15 185 15 200 L 15 370 C 15 378 22 385 30 385 L 110 385 C 118 385 125 378 125 370 L 125 200 C 125 185 120 170 100 160 L 100 25 C 100 10 95 2 90 2 L 50 2 Z" />
+            <clipPath id="new-bottle-clip"><use href="#new-bottle-path"/></clipPath>
+            
+            <!-- MODIFICADO: Texto para el fondo de la botella -->
+            <text id="bottle-brand-text" x="70" y="310" font-family="Cinzel, serif" font-size="24" font-weight="700" fill="rgba(255, 255, 255, 0.3)" text-anchor="middle" letter-spacing="2">SKÖL</text>
+
+            <!-- Gradiente para el relleno -->
+            <linearGradient id="wineFillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color: var(--color-primary-light); stop-opacity:1" />
+                <stop offset="100%" style="stop-color: var(--color-primary); stop-opacity:1" />
+            </linearGradient>
+
+            <!-- Efecto de brillo/reflejo -->
+            <path id="bottle-gloss-path" d="M 65 35 Q 80 80 70 150 L 55 150 Q 70 80 55 35 Z" transform="translate(5, 5) scale(0.9)" />
+        </defs>
+    </svg>
+
+    <!-- PANTALLA DE INICIO -->
+    <div id="landing-screen">
+        <div class="landing-container">
+            <img src="logoskol.jpeg" alt="Logo Sköl Vinoteca" class="logo">
+            <h1 class="app-title landing-title">Bienvenido a la cata<br>de Sköl</h1>
+            <div class="button-container">
+                <a href="#" id="start-tasting-button" class="bottle-button">
+                    <svg class="bottle-svg" viewBox="0 0 140 400">
+                        <use href="#new-bottle-path" class="bottle-fill" clip-path="url(#new-bottle-clip)"/>
+                        <use href="#new-bottle-path" class="bottle-outline"/>
+                        <use href="#bottle-gloss-path" class="bottle-gloss" />
+                    </svg>
+                    <span class="button-text">Catá nuestro vino!</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE CATA -->
+    <div id="tasting-screen">
+         <div class="survey-card p-4 sm:p-6 md:p-10">
+            <button id="back-to-home" title="Volver al inicio">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <header class="text-center mb-6">
+                <h1 class="app-title text-3xl sm:text-4xl">Ficha de Cata Sköl</h1>
+                <p class="text-base sm:text-lg mt-2">Evalúe los siguientes aspectos del vino</p>
+            </header>
+            
+            <!-- SECCIÓN NUEVA DE TELÉFONO -->
+            <section class="mb-8 px-4 text-center">
+                <label for="phone-number" class="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Dejá tu número para guardar tu cata, ¡y participar por premios!</label>
+                <input type="tel" id="phone-number" name="phone" class="form-input w-full max-w-xs mx-auto block p-2 text-center" placeholder="Tu número de teléfono">
+            </section>
+            
+            <section class="mb-8">
+                <div>
+                    <label for="wine-selector" class="block text-sm font-medium text-[var(--color-primary)] mb-1">Seleccionar Vino</label>
+                    <select id="wine-selector" class="form-input w-full p-2">
+                        <option value="" selected disabled>Elige un vino de la lista...</option>
+                        <!-- Las opciones se agregarán con JavaScript -->
+                    </select>
+                </div>
+            </section>
+            
+            <!-- SECCIÓN DE SLIDERS REESTRUCTURADA -->
+            <main>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8">
+                     <div class="flex flex-col items-center space-y-4">
+                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Aroma</h2>
+                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="aroma-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="aroma-value" data-fill-target="aroma-fill"></div>
+                        <span class="value-display" id="aroma-value">50</span>
+                    </div>
+                     <div class="flex flex-col items-center space-y-4">
+                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Sabor</h2>
+                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="sabor-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="sabor-value" data-fill-target="sabor-fill"></div>
+                        <span class="value-display" id="sabor-value">50</span>
+                    </div>
+                     <div class="flex flex-col items-center space-y-4">
+                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Sensación<br>en Boca</h2>
+                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="sensacion-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="sensacion-value" data-fill-target="sensacion-fill"></div>
+                        <span class="value-display" id="sensacion-value">50</span>
+                    </div>
+                     <div class="flex flex-col items-center space-y-4">
+                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Ácido/<br>Dulce</h2>
+                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="acido-dulce-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="acido-dulce-value" data-fill-target="acido-dulce-fill"></div>
+                        <span class="value-display" id="acido-dulce-value">50</span>
+                    </div>
+                </div>
+
+                <!-- 5to VINO - MÁS GRANDE Y CENTRADO -->
+                <div class="mt-12 flex flex-col items-center">
+                    <div class="flex flex-col items-center space-y-4 transform scale-110">
+                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Satisfacción</h2>
+                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="satisfaccion-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="satisfaccion-value" data-fill-target="satisfaccion-fill"></div>
+                        <span class="value-display" id="satisfaccion-value">50</span>
+                    </div>
+                </div>
+            </main>
+
+            <!-- SECCIÓN NUEVA DE PREGUNTAS -->
+            <div class="mt-10 mx-auto max-w-lg">
+                <div class="mb-6">
+                    <h3 class="aspect-label text-lg text-center mb-3">¿En qué contexto lo tomarías?</h3>
+                    <div class="flex justify-center items-center space-x-4">
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="context" value="Social" class="form-radio h-5 w-5"><span class="font-semibold text-sm sm:text-base">Amigos/Familia</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="context" value="Solo" class="form-radio h-5 w-5"><span class="font-semibold text-sm sm:text-base">Solo/a</span></label>
+                    </div>
+                </div>
+                <div>
+                     <h3 class="aspect-label text-lg text-center mb-3">¿Ideal para...</h3>
+                    <div class="flex justify-center items-center space-x-4">
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="pairing" value="Comida" class="form-radio h-5 w-5"><span class="font-semibold text-sm sm:text-base">Acompañar comidas</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="pairing" value="Copa" class="form-radio h-5 w-5"><span class="font-semibold text-sm sm:text-base">Tomar una copa</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <h2 class="aspect-label text-xl sm:text-2xl text-center mb-4">Notas de Cata</h2>
+                <div class="mb-3"><p class="text-sm text-center mb-2">Añade descriptores comunes con un clic:</p><div id="descriptor-tags" class="flex flex-wrap justify-center gap-2"></div></div>
+                <textarea id="tasting-notes" rows="4" class="form-input w-full p-3 transition text-sm" placeholder="Describa aquí sus impresiones sobre el vino..."></textarea>
+            </div>
+            <footer class="text-center mt-8">
+                <div class="mb-6"><h3 class="aspect-label text-2xl">Puntuación Total</h3><p id="total-score" class="app-title text-4xl sm:text-5xl" style="text-shadow: none;">50</p><p id="qualitative-score" class="text-lg mt-1 h-6"></p></div>
+                <button id="submit-button" class="bg-[var(--color-primary)] text-[var(--color-text-dark)] font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#a17e47] transition-colors duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed">Enviar Cata</button>
+            </footer>
+        </div>
+    </div>
+    
+    <!-- VENTANA MODAL PARA NOTIFICACIONES -->
+    <div id="notification-modal" class="hidden">
+        <div class="modal-content">
+            <div id="modal-icon-container"></div>
+            <h2 id="modal-title" class="modal-title"></h2>
+            <p id="modal-message" class="modal-message"></p>
+            <button id="modal-close-button" class="modal-close-button">Cerrar</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // --- NAVEGACIÓN ENTRE PANTALLAS ---
+        const landingScreen = document.getElementById('landing-screen');
+        const tastingScreen = document.getElementById('tasting-screen');
+        const startTastingButton = document.getElementById('start-tasting-button');
+        const backToHomeButton = document.getElementById('back-to-home');
+
+        function showScreen(screenToShow) {
+            const screenToHide = (screenToShow === landingScreen) ? tastingScreen : landingScreen;
+            
+            screenToHide.classList.add('hidden');
+            setTimeout(() => {
+                screenToHide.style.display = 'none';
+                screenToShow.style.display = 'flex';
+                setTimeout(() => screenToShow.classList.remove('hidden'), 20);
+            }, 500);
+        }
+        
+        startTastingButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            showScreen(tastingScreen);
+        });
+        
+        backToHomeButton.addEventListener('click', () => {
+            showScreen(landingScreen);
+        });
+
+        // --- LÓGICA DE LA FICHA DE CATA ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "...", authDomain: "...", projectId: "...", storageBucket: "...", messagingSenderId: "...", appId: "..." };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        let userId = null;
+        let currentWineType = 'Tinto'; // Variable para guardar el tipo de vino actual
+
+        onAuthStateChanged(auth, (user) => { if (user) userId = user.uid; });
+
+        async function authenticateUser() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) { console.error("Authentication Error:", error); }
+        }
+
+        const sliders = document.querySelectorAll('.slider');
+        const totalScoreEl = document.getElementById('total-score');
+        const qualitativeScoreEl = document.getElementById('qualitative-score');
+        const tastingNotes = document.getElementById('tasting-notes');
+        const descriptorTagsContainer = document.getElementById('descriptor-tags');
+        
+        const wineColorsHSL = {
+            Blanco: { h: 50,  s: 70, l_start: 90, l_end: 70 },
+            Rosado: { h: 350, s: 80, l_start: 85, l_end: 65 }
+        };
+
+        const descriptors = {
+            Tinto: ['Frutos Rojos', 'Frutos Negros', 'Especias', 'Madera', 'Vainilla', 'Cuero', 'Terroso'],
+            Blanco: ['Cítricos', 'Fruta de Hueso', 'Tropical', 'Floral', 'Mineral', 'Mantequilla', 'Fresco'],
+            Rosado: ['Frutilla', 'Cereza', 'Floral', 'Cítrico', 'Refrescante', 'Seco']
+        };
+
+        function populateDescriptors(wineType) {
+            descriptorTagsContainer.innerHTML = '';
+            (descriptors[wineType] || []).forEach(tagText => {
+                const tag = document.createElement('span');
+                tag.className = 'descriptor-tag';
+                tag.textContent = tagText;
+                tag.addEventListener('click', () => { tastingNotes.value += (tastingNotes.value ? ', ' : '') + tagText; });
+                descriptorTagsContainer.appendChild(tag);
+            });
+        }
+        
+        const updateSliderVisuals = (slider) => {
+            const value = parseInt(slider.value);
+            const valueEl = document.getElementById(slider.dataset.value);
+            const fillEl = document.querySelector(`[data-fill-id="${slider.dataset.fillTarget}"]`);
+            
+            if (valueEl) valueEl.textContent = value;
+            if (fillEl) {
+                const minFillHeight = 20;
+                const maxFillHeight = 355;
+                const currentFill = minFillHeight + ((maxFillHeight - minFillHeight) * (value / 100));
+                
+                fillEl.setAttribute('y', 385 - currentFill);
+                fillEl.setAttribute('height', currentFill);
+
+                let newFillColor;
+                if (currentWineType === 'Tinto') {
+                    const violet = { h: 280, s: 60, l: 40 };
+                    const wineRed = { h: 360, s: 55, l: 30 };
+                    const intenseRed = { h: 360, s: 70, l: 45 };
+
+                    if (value <= 50) {
+                        const t = value / 50;
+                        newFillColor = `hsl(${violet.h + (wineRed.h - violet.h) * t}, ${violet.s + (wineRed.s - violet.s) * t}%, ${violet.l + (wineRed.l - violet.l) * t}%)`;
+                    } else {
+                        const t = (value - 50) / 50;
+                        newFillColor = `hsl(${wineRed.h + (intenseRed.h - wineRed.h) * t}, ${wineRed.s + (intenseRed.s - wineRed.s) * t}%, ${wineRed.l + (intenseRed.l - wineRed.l) * t}%)`;
+                    }
+                } else {
+                    const colorParams = wineColorsHSL[currentWineType]; 
+                    if (colorParams) {
+                        const newLightness = colorParams.l_start + (colorParams.l_end - colorParams.l_start) * (value / 100);
+                        newFillColor = `hsl(${colorParams.h}, ${colorParams.s}%, ${newLightness}%)`;
+                    }
+                }
+                if (newFillColor) {
+                    fillEl.style.fill = newFillColor;
+                }
+            }
+        };
+
+        const calculateTotalScore = () => {
+            let total = 0;
+            sliders.forEach(s => total += parseInt(s.value));
+            const average = Math.round(total / sliders.length);
+            totalScoreEl.textContent = average;
+            qualitativeScoreEl.textContent = (score => {
+                if (score >= 95) return "Excepcional"; if (score >= 90) return "Excelente";
+                if (score >= 85) return "Muy Bueno"; if (score >= 80) return "Bueno";
+                return "";
+            })(average);
+            return average;
+        };
+
+        sliders.forEach(slider => {
+            slider.addEventListener('input', () => {
+                updateSliderVisuals(slider);
+                calculateTotalScore();
+            });
+        });
+        
+        // --- LÓGICA DE SELECCIÓN DE VINO ---
+        const wineSelector = document.getElementById('wine-selector');
+
+        const fictitiousWines = [
+            { name: 'Susurro de los Andes Malbec', winery: 'Viñedos de la Cumbre', vintage: '2022', type: 'Tinto' },
+            { name: 'Luna Creciente Cabernet', winery: 'Bodega del Sol', vintage: '2021', type: 'Tinto' },
+            { name: 'Roca del Fuego Blend', winery: 'Terrazas Olvidadas', vintage: '2020', type: 'Tinto' },
+            { name: 'Brisa Patagónica Pinot Noir', winery: 'Vientos del Sur', vintage: '2023', type: 'Tinto' },
+            { name: 'Oro del Valle Torrontés', winery: 'Finca La Dorada', vintage: '2023', type: 'Blanco' },
+            { name: 'Alma de Cuyo Syrah', winery: 'Viñedos de la Cumbre', vintage: '2021', type: 'Tinto' },
+            { name: 'Estrella Nocturna Bonarda', winery: 'Bodega del Sol', vintage: '2022', type: 'Tinto' },
+            { name: 'Secreto del Enólogo Gran Reserva', winery: 'Terrazas Olvidadas', vintage: '2019', type: 'Tinto' },
+            { name: 'Glaciar Austral Sauvignon Blanc', winery: 'Vientos del Sur', vintage: '2024', type: 'Blanco' },
+            { name: 'Canto de la Tierra Rosé', winery: 'Finca La Dorada', vintage: '2023', type: 'Rosado' }
+        ];
+
+        fictitiousWines.forEach(wine => {
+            const option = document.createElement('option');
+            option.value = JSON.stringify(wine);
+            option.textContent = `${wine.name} (${wine.type}) - ${wine.winery}`;
+            wineSelector.appendChild(option);
+        });
+
+        wineSelector.addEventListener('change', (e) => {
+            if (e.target.value) {
+                try {
+                    const selectedWine = JSON.parse(e.target.value);
+                    currentWineType = selectedWine.type;
+                    populateDescriptors(currentWineType);
+                    sliders.forEach(updateSliderVisuals);
+                } catch (error) {
+                    console.error('Error al procesar datos del vino:', error);
+                }
+            }
+        });
+
+        // --- LÓGICA DE ENVÍO A GOOGLE SHEETS ---
+        const submitButton = document.getElementById('submit-button');
+        // VITAL: Reemplaza la siguiente URL por la URL de tu Web App de Google Apps Script.
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVuZWxgUoxUad42o3y-OUqeZhoinsetiEHzRvdBSEQ1Cen3lKd8Xbaxn6eBweRAjo4FQ/exec';
+
+        submitButton.addEventListener('click', async () => {
+            const phoneNumber = document.getElementById('phone-number').value.trim();
+            const selectedWineValue = wineSelector.value;
+            
+            if (!phoneNumber) {
+                showNotification('error', 'Faltan datos', 'Por favor, ingresa tu número de teléfono para continuar.');
+                return;
+            }
+            if (!selectedWineValue) {
+                showNotification('error', 'Faltan datos', 'Por favor, selecciona un vino de la lista.');
+                return;
+            }
+        
+            submitButton.disabled = true;
+            submitButton.textContent = 'Enviando...';
+
+            try {
+                const selectedWine = JSON.parse(selectedWineValue);
+                const scores = {};
+                sliders.forEach(slider => {
+                    const aspect = slider.dataset.value.replace('-value', '');
+                    scores[aspect] = parseInt(slider.value);
+                });
+
+                const tastingData = {
+                    userId: userId,
+                    phone: phoneNumber,
+                    wineName: selectedWine.name,
+                    winery: selectedWine.winery,
+                    vintage: selectedWine.vintage,
+                    wineType: selectedWine.type,
+                    aroma: scores.aroma,
+                    sabor: scores.sabor,
+                    sensacion: scores.sensacion,
+                    acidoDulce: scores['acido-dulce'],
+                    satisfaccion: scores.satisfaccion,
+                    totalScore: calculateTotalScore(),
+                    context: document.querySelector('input[name="context"]:checked')?.value || 'No especificado',
+                    pairing: document.querySelector('input[name="pairing"]:checked')?.value || 'No especificado',
+                    notes: tastingNotes.value.trim(),
+                    createdAt: new Date().toLocaleString("es-AR")
+                };
+                
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'cors',
+                    cache: 'no-cache',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({tastingData})
+                });
+
+                if (response.ok) {
+                    showNotification('success', '¡Cata Enviada!', 'Muchas gracias por participar. Tus resultados han sido enviados.');
+                    
+                    document.getElementById('tasting-screen').querySelector('.survey-card').scrollTop = 0;
+                    document.getElementById('phone-number').value = '';
+                    wineSelector.value = '';
+                    tastingNotes.value = '';
+                    document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+                    sliders.forEach(slider => { 
+                        slider.value = 50;
+                        updateSliderVisuals(slider);
+                    });
+                    calculateTotalScore();
+                    
+                    setTimeout(() => {
+                        if(!notificationModal.classList.contains('hidden')) {
+                           notificationModal.classList.add('hidden');
+                        }
+                        showScreen(landingScreen);
+                    }, 3000);
+                } else {
+                     throw new Error('Falló la respuesta del servidor.');
+                }
+
+            } catch (e) {
+                console.error("Error sending data to Google Sheet: ", e);
+                showNotification('error', 'Error', 'No se pudo enviar la cata. Por favor, inténtalo de nuevo.');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Enviar Cata';
+            }
+        });
+        
+        // --- LÓGICA DE NOTIFICACIONES ---
+        const notificationModal = document.getElementById('notification-modal');
+        const modalIconContainer = document.getElementById('modal-icon-container');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCloseButton = document.getElementById('modal-close-button');
+
+        const icons = {
+            success: `<svg class="modal-icon" style="color: #6a9c34;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+            error: `<svg class="modal-icon" style="color: #d44c4c;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`
+        };
+
+        function showNotification(type, title, message) {
+            modalIconContainer.innerHTML = icons[type];
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            notificationModal.classList.remove('hidden');
+        }
+
+        modalCloseButton.addEventListener('click', () => {
+            notificationModal.classList.add('hidden');
+        });
+
+        // --- INICIALIZACIÓN ---
+        (async () => {
+            await authenticateUser();
+            sliders.forEach(updateSliderVisuals);
+            calculateTotalScore();
+            populateDescriptors(currentWineType);
+        })();
+
+    </script>
+</body>
+</html>
+
