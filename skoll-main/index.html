@@ -352,28 +352,22 @@
 </head>
 <body>
 
-    <!-- SVG DEFINITIONS -->
     <svg width="0" height="0" style="position:absolute">
         <defs>
-            <!-- Forma de la Botella -->
             <path id="new-bottle-path" d="M 50 2 C 45 2 40 10 40 25 L 40 160 C 20 170 15 185 15 200 L 15 370 C 15 378 22 385 30 385 L 110 385 C 118 385 125 378 125 370 L 125 200 C 125 185 120 170 100 160 L 100 25 C 100 10 95 2 90 2 L 50 2 Z" />
             <clipPath id="new-bottle-clip"><use href="#new-bottle-path"/></clipPath>
             
-            <!-- MODIFICADO: Texto para el fondo de la botella -->
             <text id="bottle-brand-text" x="70" y="310" font-family="Cinzel, serif" font-size="24" font-weight="700" fill="rgba(255, 255, 255, 0.3)" text-anchor="middle" letter-spacing="2">SKÖL</text>
 
-            <!-- Gradiente para el relleno -->
             <linearGradient id="wineFillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" style="stop-color: var(--color-primary-light); stop-opacity:1" />
                 <stop offset="100%" style="stop-color: var(--color-primary); stop-opacity:1" />
             </linearGradient>
 
-            <!-- Efecto de brillo/reflejo -->
             <path id="bottle-gloss-path" d="M 65 35 Q 80 80 70 150 L 55 150 Q 70 80 55 35 Z" transform="translate(5, 5) scale(0.9)" />
         </defs>
     </svg>
 
-    <!-- PANTALLA DE INICIO -->
     <div id="landing-screen">
         <div class="landing-container">
             <img src="logoskol.jpeg" alt="Logo Sköl Vinoteca" class="logo">
@@ -391,7 +385,6 @@
         </div>
     </div>
 
-    <!-- PANTALLA DE CATA -->
     <div id="tasting-screen">
          <div class="survey-card p-4 sm:p-6 md:p-10">
             <button id="back-to-home" title="Volver al inicio">
@@ -402,7 +395,6 @@
                 <p class="text-base sm:text-lg mt-2">Evalúe los siguientes aspectos del vino</p>
             </header>
             
-            <!-- SECCIÓN NUEVA DE TELÉFONO -->
             <section class="mb-8 px-4 text-center">
                 <label for="phone-number" class="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Dejá tu número para guardar tu cata, ¡y participar por premios!</label>
                 <input type="tel" id="phone-number" name="phone" class="form-input w-full max-w-xs mx-auto block p-2 text-center" placeholder="Tu número de teléfono">
@@ -413,12 +405,10 @@
                     <label for="wine-selector" class="block text-sm font-medium text-[var(--color-primary)] mb-1">Seleccionar Vino</label>
                     <select id="wine-selector" class="form-input w-full p-2">
                         <option value="" selected disabled>Elige un vino de la lista...</option>
-                        <!-- Las opciones se agregarán con JavaScript -->
-                    </select>
+                        </select>
                 </div>
             </section>
             
-            <!-- SECCIÓN DE SLIDERS REESTRUCTURADA -->
             <main>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8">
                      <div class="flex flex-col items-center space-y-4">
@@ -443,7 +433,6 @@
                     </div>
                 </div>
 
-                <!-- 5to VINO - MÁS GRANDE Y CENTRADO -->
                 <div class="mt-12 flex flex-col items-center">
                     <div class="flex flex-col items-center space-y-4 transform scale-110">
                         <h2 class="aspect-label text-xl sm:text-2xl text-center">Satisfacción</h2>
@@ -453,7 +442,6 @@
                 </div>
             </main>
 
-            <!-- SECCIÓN NUEVA DE PREGUNTAS -->
             <div class="mt-10 mx-auto max-w-lg">
                 <div class="mb-6">
                     <h3 class="aspect-label text-lg text-center mb-3">¿En qué contexto lo tomarías?</h3>
@@ -483,7 +471,6 @@
         </div>
     </div>
     
-    <!-- VENTANA MODAL PARA NOTIFICACIONES -->
     <div id="notification-modal" class="hidden">
         <div class="modal-content">
             <div id="modal-icon-container"></div>
@@ -670,7 +657,7 @@
         const submitButton = document.getElementById('submit-button');
         // VITAL: Reemplaza la siguiente URL por la URL de tu Web App de Google Apps Script.
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVuZWxgUoxUad42o3y-OUqeZhoinsetiEHzRvdBSEQ1Cen3lKd8Xbaxn6eBweRAjo4FQ/exec';
-
+                            
         submitButton.addEventListener('click', async () => {
             const phoneNumber = document.getElementById('phone-number').value.trim();
             const selectedWineValue = wineSelector.value;
@@ -722,6 +709,9 @@
                     body: JSON.stringify({tastingData})
                 });
 
+                 // --- BLOQUE MODIFICADO PARA MEJOR MANEJO DE ERRORES ---
+                const result = await response.json();
+
                 if (response.ok) {
                     showNotification('success', '¡Cata Enviada!', 'Muchas gracias por participar. Tus resultados han sido enviados.');
                     
@@ -743,12 +733,14 @@
                         showScreen(landingScreen);
                     }, 3000);
                 } else {
+                     // Si la respuesta no es OK o el script reportó un error, lanzamos un error con el mensaje del script
+                     throw new Error(result.error || 'Falló la respuesta del servidor. Revisa los permisos del script.');
                      throw new Error('Falló la respuesta del servidor.');
                 }
 
             } catch (e) {
                 console.error("Error sending data to Google Sheet: ", e);
-                showNotification('error', 'Error', 'No se pudo enviar la cata. Por favor, inténtalo de nuevo.');
+                showNotification('error', 'Error de Envío', e.message || 'Ocurrió un error. Revisa la consola del navegador para más detalles.');
             } finally {
                 submitButton.disabled = false;
                 submitButton.textContent = 'Enviar Cata';
@@ -790,3 +782,6 @@
 </body>
 </html>
 
+
+}
+Como puedo ver lo q esta tirando la consola?
