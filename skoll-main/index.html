@@ -335,7 +335,6 @@
 </head>
 <body>
 
-    <!-- SVG DEFINITIONS -->
     <svg width="0" height="0" style="position:absolute">
         <defs>
             <path id="new-bottle-path" d="M 50 2 C 45 2 40 10 40 25 L 40 160 C 20 170 15 185 15 200 L 15 370 C 15 378 22 385 30 385 L 110 385 C 118 385 125 378 125 370 L 125 200 C 125 185 120 170 100 160 L 100 25 C 100 10 95 2 90 2 L 50 2 Z" />
@@ -349,7 +348,6 @@
         </defs>
     </svg>
 
-    <!-- PANTALLA DE INICIO -->
     <div id="landing-screen">
         <div class="landing-container">
             <img src="logoskol.jpeg" alt="Logo Sköl Vinoteca" class="logo">
@@ -367,7 +365,6 @@
         </div>
     </div>
 
-    <!-- PANTALLA DE CATA -->
     <div id="tasting-screen">
          <div class="survey-card p-4 sm:p-6 md:p-10">
             <button id="back-to-home" title="Volver al inicio">
@@ -388,8 +385,7 @@
                     <label for="wine-selector" class="block text-sm font-medium text-[var(--color-primary)] mb-1">Seleccionar Vino</label>
                     <select id="wine-selector" class="form-input w-full p-2">
                         <option value="" selected disabled>Elige un vino de la lista...</option>
-                        <!-- Las opciones se agregarán con JavaScript -->
-                    </select>
+                        </select>
                 </div>
             </section>
             
@@ -455,7 +451,6 @@
         </div>
     </div>
     
-    <!-- VENTANA MODAL PARA NOTIFICACIONES -->
     <div id="notification-modal" class="hidden">
         <div class="modal-content">
             <div id="modal-icon-container"></div>
@@ -466,9 +461,6 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
         // --- NAVEGACIÓN ENTRE PANTALLAS ---
         const landingScreen = document.getElementById('landing-screen');
         const tastingScreen = document.getElementById('tasting-screen');
@@ -496,23 +488,7 @@
         });
 
         // --- LÓGICA DE LA FICHA DE CATA ---
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : { apiKey: "...", authDomain: "...", projectId: "...", storageBucket: "...", messagingSenderId: "...", appId: "..." };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        let userId = null;
         let currentWineType = 'Tinto';
-
-        auth.onAuthStateChanged((user) => { if (user) userId = user.uid; });
-
-        async function authenticateUser() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            } catch (error) { console.error("Authentication Error:", error); }
-        }
 
         const sliders = document.querySelectorAll('.slider');
         const totalScoreEl = document.getElementById('total-score');
@@ -666,7 +642,6 @@
                 });
 
                 const tastingData = {
-                    userId: userId,
                     phone: phoneNumber,
                     wineName: selectedWine.name,
                     winery: selectedWine.winery,
@@ -752,8 +727,7 @@
         });
 
         // --- INICIALIZACIÓN ---
-        (async () => {
-            await authenticateUser();
+        (() => {
             sliders.forEach(updateSliderVisuals);
             calculateTotalScore();
             populateDescriptors(currentWineType);
@@ -762,14 +736,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
