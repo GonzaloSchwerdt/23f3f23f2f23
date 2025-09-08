@@ -38,8 +38,8 @@
             background-color: var(--color-background);
             background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
             color: var(--color-text-primary);
-            height: 100vh;
-            overflow: hidden; /* Previene el scroll en toda la app */
+            /* height: 100vh; */ /* Removido para permitir scroll en toda la página */
+            /* overflow: hidden; */ /* Removido para permitir scroll en toda la página */
         }
         
         .app-title {
@@ -66,6 +66,7 @@
             justify-content: space-evenly;
             width: 100%;
             height: 100%;
+            position: relative;
         }
 
         .logo {
@@ -97,8 +98,8 @@
             justify-content: center;
             width: 90vw;
             max-width: 600px;
-            height: 30vh;
-            max-height: 220px;
+            height: 35vh; /* Aumentado de 30vh para dar más espacio al texto */
+            max-height: 250px; /* Aumentado de 220px para dar más espacio al texto */
             cursor: pointer;
             transition: transform 0.3s ease-out;
             filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
@@ -162,11 +163,11 @@
            3. ESTILOS DE LA PANTALLA DE CATA (TASTING)
            ========================================================================== */
         #tasting-screen {
-            height: 100vh;
+            min-height: 100vh; /* Cambiado para permitir que el contenido se expanda */
             display: none; /* Inicia oculto */
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            padding: 2rem 1rem; /* Más padding vertical para celulares */
             transition: opacity 0.5s ease-in, transform 0.5s ease-in;
         }
         .survey-card {
@@ -177,8 +178,8 @@
             width: 100%;
             max-width: 64rem;
             position: relative;
-            max-height: 95vh;
-            overflow-y: auto; /* Scroll si el contenido es mucho */
+            /* max-height: 95vh; */ /* Removido para que el scroll lo maneje el body */
+            /* overflow-y: auto; */ /* Removido para que el scroll lo maneje el body */
         }
         .aspect-label {
             font-family: var(--font-display);
@@ -372,6 +373,9 @@
                     <span class="button-text">Catá nuestro vino!</span>
                 </a>
             </div>
+            <div class="absolute bottom-4">
+                <p class="text-xs text-gray-400/50">~ Pradu Services ~</p>
+            </div>
         </div>
     </div>
 
@@ -380,7 +384,7 @@
             <button id="back-to-home" title="Volver al inicio">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             </button>
-            <header class="text-center mb-6">
+            <header class="text-center mb-6 pt-12 sm:pt-0">
                 <h1 class="app-title text-3xl sm:text-4xl">Ficha de Cata Sköl</h1>
                 <p class="text-base sm:text-lg mt-2">Evalúe los siguientes aspectos del vino</p>
             </header>
@@ -458,6 +462,9 @@
                 <div class="mb-6"><h3 class="aspect-label text-2xl">Puntuación Total</h3><p id="total-score" class="app-title text-4xl sm:text-5xl" style="text-shadow: none;">50</p><p id="qualitative-score" class="text-lg mt-1 h-6"></p></div>
                 <button id="submit-button" class="bg-[var(--color-primary)] text-[var(--color-text-dark)] font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#a17e47] transition-colors duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed">Enviar Cata</button>
             </footer>
+             <div class="text-center mt-6 pb-2">
+                 <p class="text-xs text-gray-400/50">~ Pradu Services ~</p>
+            </div>
         </div>
     </div>
     
@@ -746,6 +753,4 @@
     </script>
 </body>
 </html>
-
-
 
