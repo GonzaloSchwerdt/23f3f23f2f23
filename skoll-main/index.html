@@ -77,7 +77,7 @@
         }
 
         .landing-title {
-            font-size: clamp(2rem, 6vh, 3rem);
+            font-size: clamp(1.8rem, 5vh, 2.5rem); /* Achicado para mejor vista en celular */
             line-height: 1.2;
             text-align: center;
         }
@@ -98,8 +98,8 @@
             justify-content: center;
             width: 90vw;
             max-width: 600px;
-            height: 35vh; /* Aumentado de 30vh para dar más espacio al texto */
-            max-height: 250px; /* Aumentado de 220px para dar más espacio al texto */
+            height: 30vh; /* Achicado para celular */
+            max-height: 220px; /* Achicado para celular */
             cursor: pointer;
             transition: transform 0.3s ease-out;
             filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
@@ -113,8 +113,8 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 180%;
-            height: 180%;
+            width: 115%; /* Ajustado para el nuevo tamaño del botón */
+            height: 115%; /* Ajustado para el nuevo tamaño del botón */
             transform-origin: center;
             transform: translate(-50%, -50%) rotate(90deg);
         }
@@ -144,7 +144,7 @@
             z-index: 10;
             color: var(--color-text-primary);
             font-family: var(--font-display);
-            font-size: clamp(1.2rem, 4.5vh, 2rem);
+            font-size: clamp(0.9rem, 3vh, 1.4rem); /* Achicado para que no se salga del botón */
             font-weight: 700;
             white-space: nowrap;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
@@ -191,6 +191,16 @@
             color: var(--color-text-primary);
             border-radius: 0.5rem;
         }
+        /* --- CORRECCIÓN PARA AUTOCOMPLETADO DEL NAVEGADOR --- */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #4a3e35 inset !important;
+            -webkit-text-fill-color: var(--color-text-primary) !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
         .form-radio {
             color: var(--color-primary);
         }
