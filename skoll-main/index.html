@@ -185,7 +185,7 @@
             font-family: var(--font-display);
             color: var(--color-primary);
         }
-        .form-input, .form-radio {
+        .form-input, .form-select, .form-radio {
             background-color: #4a3e35;
             border: 1px solid #8b7a6b;
             color: var(--color-text-primary);
@@ -404,16 +404,16 @@
                 <input type="tel" id="phone-number" name="phone" class="form-input w-full max-w-xs mx-auto block p-2 text-center" placeholder="Tu número de teléfono">
             </section>
             
-            <section class="mb-8">
+            <section class="mb-8 px-4">
                 <div>
-                    <label for="wine-selector" class="block text-sm font-medium text-[var(--color-primary)] mb-1">Seleccionar Vino</label>
-                    <select id="wine-selector" class="form-input w-full p-2">
+                    <label for="wine-selector" class="block text-sm font-bold text-[var(--color-primary)] mb-1">Seleccionar Vino</label>
+                    <select id="wine-selector" class="form-select w-full p-2">
                         <option value="" selected disabled>Elige un vino de la lista...</option>
                         </select>
                 </div>
             </section>
             
-            <main>
+            <main class="px-4">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8">
                      <div class="flex flex-col items-center space-y-4">
                         <h2 class="aspect-label text-xl sm:text-2xl text-center">Aroma</h2>
@@ -463,11 +463,35 @@
                 </div>
             </div>
 
-            <div class="mt-8">
+            <div class="mt-8 px-4">
                 <h2 class="aspect-label text-xl sm:text-2xl text-center mb-4">Notas de Cata</h2>
                 <div class="mb-3"><p class="text-sm text-center mb-2">Añade descriptores comunes con un clic:</p><div id="descriptor-tags" class="flex flex-wrap justify-center gap-2"></div></div>
                 <textarea id="tasting-notes" rows="4" class="form-input w-full p-3 transition text-sm" placeholder="Describa aquí sus impresiones sobre el vino..."></textarea>
             </div>
+            
+            <section class="mt-10 mb-8 px-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                    <label for="age-range" class="block text-sm font-bold text-[var(--color-primary)] mb-2">Rango de Edad</label>
+                    <select id="age-range" class="form-select w-full p-2">
+                        <option value="" selected disabled>Selecciona tu edad</option>
+                        <option value="18-25">18-25 años</option>
+                        <option value="26-35">26-35 años</option>
+                        <option value="36-45">36-45 años</option>
+                        <option value="46-55">46-55 años</option>
+                        <option value="56+">56 años o más</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="gender-selector" class="block text-sm font-bold text-[var(--color-primary)] mb-2">Género</label>
+                    <select id="gender-selector" class="form-select w-full p-2">
+                        <option value="" selected disabled>Selecciona tu género</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+            </section>
+
             <footer class="text-center mt-8">
                 <div class="mb-6"><h3 class="aspect-label text-2xl">Puntuación Total</h3><p id="total-score" class="app-title text-4xl sm:text-5xl" style="text-shadow: none;">50</p><p id="qualitative-score" class="text-lg mt-1 h-6"></p></div>
                 <button id="submit-button" class="bg-[var(--color-primary)] text-[var(--color-text-dark)] font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#a17e47] transition-colors duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed">Enviar Cata</button>
@@ -646,10 +670,20 @@
                             
         submitButton.addEventListener('click', async () => {
             const phoneNumber = document.getElementById('phone-number').value.trim();
+            const ageRange = document.getElementById('age-range').value;
+            const gender = document.getElementById('gender-selector').value;
             const selectedWineValue = wineSelector.value;
             
             if (!phoneNumber) {
                 showNotification('error', 'Faltan datos', 'Por favor, ingresa tu número de teléfono para continuar.');
+                return;
+            }
+            if (!ageRange) {
+                showNotification('error', 'Faltan datos', 'Por favor, selecciona tu rango de edad.');
+                return;
+            }
+            if (!gender) {
+                showNotification('error', 'Faltan datos', 'Por favor, selecciona tu género.');
                 return;
             }
             if (!selectedWineValue) {
@@ -670,6 +704,8 @@
 
                 const tastingData = {
                     phone: phoneNumber,
+                    age: ageRange,
+                    gender: gender,
                     wineName: selectedWine.name,
                     winery: selectedWine.winery,
                     vintage: selectedWine.vintage,
@@ -699,11 +735,12 @@
                 if (response.ok && result.result === 'success') {
                     showNotification('success', '¡Cata Enviada!', 'Muchas gracias por participar. Tus resultados han sido enviados.');
                     
-                    document.getElementById('tasting-screen').querySelector('.survey-card').scrollTop = 0;
                     document.getElementById('phone-number').value = '';
+                    document.getElementById('age-range').value = '';
+                    document.getElementById('gender-selector').value = '';
                     wineSelector.value = '';
                     tastingNotes.value = '';
-                    document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+                    document.querySelectorAll('input[name="context"], input[name="pairing"]').forEach(radio => radio.checked = false);
                     sliders.forEach(slider => { 
                         slider.value = 50;
                         updateSliderVisuals(slider);
@@ -722,7 +759,7 @@
 
             } catch (e) {
                 console.error("Error sending data to Google Sheet: ", e);
-                showNotification('error', 'Error de Envío?? - Línea 723', e.message || 'Ocurrió un error. Revisa la consola del navegador para más detalles.');
+                showNotification('error', 'Error de Envío', e.message || 'Ocurrió un error. Revisa la consola del navegador para más detalles.');
                 
             } finally {
                 submitButton.disabled = false;
