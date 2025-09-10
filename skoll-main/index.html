@@ -38,8 +38,6 @@
             background-color: var(--color-background);
             background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
             color: var(--color-text-primary);
-            /* height: 100vh; */ /* Removido para permitir scroll en toda la página */
-            /* overflow: hidden; */ /* Removido para permitir scroll en toda la página */
         }
         
         .app-title {
@@ -163,11 +161,11 @@
            3. ESTILOS DE LA PANTALLA DE CATA (TASTING)
            ========================================================================== */
         #tasting-screen {
-            min-height: 100vh; /* Cambiado para permitir que el contenido se expanda */
-            display: none; /* Inicia oculto */
+            min-height: 100vh;
+            display: none;
             align-items: center;
             justify-content: center;
-            padding: 2rem 1rem; /* Más padding vertical para celulares */
+            padding: 2rem 1rem;
             transition: opacity 0.5s ease-in, transform 0.5s ease-in;
         }
         .survey-card {
@@ -178,20 +176,17 @@
             width: 100%;
             max-width: 64rem;
             position: relative;
-            /* max-height: 95vh; */ /* Removido para que el scroll lo maneje el body */
-            /* overflow-y: auto; */ /* Removido para que el scroll lo maneje el body */
         }
         .aspect-label {
             font-family: var(--font-display);
             color: var(--color-primary);
         }
-        .form-input, .form-select, .form-radio {
+        .form-input, .form-radio, .form-select {
             background-color: #4a3e35;
             border: 1px solid #8b7a6b;
             color: var(--color-text-primary);
             border-radius: 0.5rem;
         }
-        /* --- CORRECCIÓN PARA AUTOCOMPLETADO DEL NAVEGADOR --- */
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
         input:-webkit-autofill:focus,
@@ -199,13 +194,6 @@
             -webkit-box-shadow: 0 0 0 30px #4a3e35 inset !important;
             -webkit-text-fill-color: var(--color-text-primary) !important;
             transition: background-color 5000s ease-in-out 0s;
-        }
-
-        .form-radio {
-            color: var(--color-primary);
-        }
-        .form-radio:checked {
-             background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
         }
         .bottle-container {
             position: relative;
@@ -228,7 +216,6 @@
             transform-origin: 0 0;
             transform: rotate(-90deg);
         }
-        /* ESTILO DEL CORCHO PARA EL SLIDER */
         .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
@@ -244,7 +231,6 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.4);
             transform: rotate(2deg);
         }
-
         .slider::-moz-range-thumb {
             width: 30px;
             height: 22px;
@@ -257,22 +243,75 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.4);
             transform: rotate(2deg);
         }
-
         .value-display {
             font-family: var(--font-display); color: var(--color-text-dark); background-color: var(--color-primary);
             padding: 2px 10px; border-radius: 5px; font-size: 1.25rem;
         }
-        .descriptor-tag {
-            cursor: pointer; background-color: #4a3e35; border: 1px solid #8b7a6b;
-            padding: 0.25rem 0.75rem; border-radius: 9999px; transition: all 0.2s; font-size: 0.8rem;
-        }
-        .descriptor-tag:hover {
-            background-color: var(--color-primary); color: var(--color-text-dark); border-color: var(--color-primary);
-        }
 
         /* ==========================================================================
-           4. UTILIDADES Y OTROS
+           4. NUEVOS ESTILOS Y UTILIDADES
            ========================================================================== */
+        .section-title {
+            font-family: var(--font-display);
+            color: var(--color-primary-light);
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+        .context-button {
+            background-color: #4a3e35;
+            border: 1px solid #8b7a6b;
+            color: var(--color-text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .context-button:hover {
+            border-color: var(--color-primary-light);
+        }
+        .context-button.active {
+            background-color: var(--color-primary);
+            color: var(--color-text-dark);
+            border-color: var(--color-primary);
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .pairing-slider-container {
+            position: relative;
+            width: 100%;
+        }
+        .pairing-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 12px; /* Aumentado el grosor */
+            background: #4a3e35;
+            border: 1px solid #8b7a6b;
+            border-radius: 6px; /* Ajustado al nuevo grosor */
+            outline: none;
+            cursor: pointer;
+        }
+        .pairing-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;   /* Aumentado el tamaño */
+            height: 24px;  /* Aumentado el tamaño */
+            background: var(--color-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--color-text-dark);
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .pairing-slider::-moz-range-thumb {
+            width: 24px;   /* Aumentado el tamaño */
+            height: 24px;  /* Aumentado el tamaño */
+            background: var(--color-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--color-text-dark);
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
         .hidden {
             opacity: 0;
             pointer-events: none;
@@ -294,8 +333,6 @@
         #back-to-home:hover {
             background-color: var(--color-primary); color: var(--color-text-dark); transform: scale(1.1);
         }
-
-        /* ESTILOS PARA LA VENTANA MODAL DE NOTIFICACIÓN */
         #notification-modal {
             position: fixed;
             top: 0; left: 0;
@@ -352,6 +389,12 @@
         .modal-close-button:hover {
             background-color: var(--color-primary-light);
         }
+        .form-label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
     </style>
 </head>
 <body>
@@ -384,7 +427,7 @@
                 </a>
             </div>
             <div class="absolute bottom-4">
-                <p class="text-sm text-white">~ Pradu Services ~</p>
+                <p class="text-white font-normal text-base">~ Pradu Services ~</p>
             </div>
         </div>
     </div>
@@ -404,21 +447,21 @@
                 <input type="tel" id="phone-number" name="phone" class="form-input w-full max-w-xs mx-auto block p-2 text-center" placeholder="Tu número de teléfono">
             </section>
             
-            <section class="mb-8 px-4">
+            <section class="mb-8">
                 <div>
-                    <label for="wine-selector" class="block text-sm font-bold text-[var(--color-primary)] mb-1">Seleccionar Vino</label>
+                    <label for="wine-selector" class="form-label">Seleccionar Vino</label>
                     <select id="wine-selector" class="form-select w-full p-2">
                         <option value="" selected disabled>Elige un vino de la lista...</option>
                         </select>
                 </div>
             </section>
             
-            <main class="px-4">
+            <main>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-x-2 gap-y-8">
                      <div class="flex flex-col items-center space-y-4">
-                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Aroma</h2>
-                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="aroma-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="aroma-value" data-fill-target="aroma-fill"></div>
-                        <span class="value-display" id="aroma-value">50</span>
+                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Precio/<br>Calidad</h2>
+                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="precio-calidad-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="precio-calidad-value" data-fill-target="precio-calidad-fill"></div>
+                        <span class="value-display" id="precio-calidad-value">50</span>
                     </div>
                      <div class="flex flex-col items-center space-y-4">
                         <h2 class="aspect-label text-xl sm:text-2xl text-center">Sabor</h2>
@@ -426,79 +469,84 @@
                         <span class="value-display" id="sabor-value">50</span>
                     </div>
                      <div class="flex flex-col items-center space-y-4">
-                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Sensación<br>en Boca</h2>
-                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="sensacion-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="sensacion-value" data-fill-target="sensacion-fill"></div>
-                        <span class="value-display" id="sensacion-value">50</span>
+                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Aroma</h2>
+                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="aroma-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="aroma-value" data-fill-target="aroma-fill"></div>
+                        <span class="value-display" id="aroma-value">50</span>
                     </div>
                      <div class="flex flex-col items-center space-y-4">
-                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Ácido/<br>Dulce</h2>
-                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="acido-dulce-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="acido-dulce-value" data-fill-target="acido-dulce-fill"></div>
-                        <span class="value-display" id="acido-dulce-value">50</span>
-                    </div>
-                </div>
-
-                <div class="mt-12 flex flex-col items-center">
-                    <div class="flex flex-col items-center space-y-4 transform scale-110">
-                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Satisfacción</h2>
-                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="satisfaccion-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="satisfaccion-value" data-fill-target="satisfaccion-fill"></div>
-                        <span class="value-display" id="satisfaccion-value">50</span>
+                        <h2 class="aspect-label text-xl sm:text-2xl text-center">Presentación</h2>
+                        <div class="bottle-container"><svg class="wine-bottle-svg" viewBox="0 0 140 400"><rect class="bottle-fill-svg" x="0" y="200" width="140" height="200" clip-path="url(#new-bottle-clip)" data-fill-id="presentacion-fill"/><use href="#new-bottle-path" class="bottle-outline"/><use href="#bottle-brand-text"/></svg><input type="range" min="0" max="100" value="50" class="slider" data-value="presentacion-value" data-fill-target="presentacion-fill"></div>
+                        <span class="value-display" id="presentacion-value">50</span>
                     </div>
                 </div>
             </main>
 
             <div class="mt-10 mx-auto max-w-lg">
                 <div class="mb-6">
-                    <h3 class="aspect-label text-lg text-center mb-3">¿En qué contexto lo tomarías?</h3>
-                    <div class="flex justify-center items-center space-x-4">
-                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="context" value="Social" class="form-radio h-5 w-5"><span class="font-semibold text-sm sm:text-base">Amigos/Familia</span></label>
-                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="context" value="Solo" class="form-radio h-5 w-5"><span class="font-semibold text-sm sm:text-base">Solo/a</span></label>
+                    <h3 class="section-title text-lg text-center mb-3">¿En qué contexto lo tomarías?</h3>
+                    <div id="context-buttons" class="flex flex-wrap justify-center gap-3">
+                        <button type="button" class="context-button">Familia</button>
+                        <button type="button" class="context-button">Amigos</button>
+                        <button type="button" class="context-button">Pareja</button>
+                        <button type="button" class="context-button">Solo</button>
                     </div>
                 </div>
-                <div>
-                     <h3 class="aspect-label text-lg text-center mb-3">¿Ideal para...</h3>
-                    <div class="flex justify-center items-center space-x-4">
-                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="pairing" value="Comida" class="form-radio h-5 w-5"><span class="font-semibold text-sm sm:text-base">Acompañar comidas</span></label>
-                        <label class="flex items-center space-x-2 cursor-pointer"><input type="radio" name="pairing" value="Copa" class="form-radio h-5 w-5"><span class="font-semibold text-sm sm:text-base">Tomar una copa</span></label>
-                    </div>
+                <div class="mt-8">
+                     <h3 class="section-title text-lg text-center mb-3">¿Ideal para...</h3>
+                     <div class="pairing-slider-container px-4">
+                        <input type="range" id="pairing-slider" min="0" max="100" value="50" class="pairing-slider">
+                        <div class="flex justify-between items-start text-xs mt-2 text-gray-300">
+                            <div class="text-center">
+                                <svg class="mx-auto mb-1 h-8 w-8" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2"><path d="M12 14h10v10H12zM17 24v8M22 19l8-2-1 9-7-1M28 32l-6-2-2 6 6 2 2-6z"/></svg>
+                                <span class="font-bold">Acompañar<br>comidas</span>
+                            </div>
+                            <div class="text-center">
+                                <svg class="mx-auto mb-1 h-8 w-8" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2"><path d="M34 18v18M28 22h12M28 26h12M28 30h12"/><path d="M40 18c0-3.31-2.69-6-6-6s-6 2.69-6 6v18c0 3.31 2.69 6 6 6s6-2.69 6-6V18z"/><path d="M16 28h-4l-1-10h10l-1 10h-4zm-2 0v8m2-8v8"/></svg>
+                                <span class="font-bold">Tomar<br>una copa</span>
+                            </div>
+                        </div>
+                     </div>
                 </div>
             </div>
 
-            <div class="mt-8 px-4">
-                <h2 class="aspect-label text-xl sm:text-2xl text-center mb-4">Notas de Cata</h2>
-                <div class="mb-3"><p class="text-sm text-center mb-2">Añade descriptores comunes con un clic:</p><div id="descriptor-tags" class="flex flex-wrap justify-center gap-2"></div></div>
+            <div class="mt-8">
+                <h2 class="section-title text-xl sm:text-2xl text-center mb-4">Notas de Cata</h2>
                 <textarea id="tasting-notes" rows="4" class="form-input w-full p-3 transition text-sm" placeholder="Describa aquí sus impresiones sobre el vino..."></textarea>
             </div>
             
-            <section class="mt-10 mb-8 px-4 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                    <label for="age-range" class="block text-sm font-bold text-[var(--color-primary)] mb-2">Rango de Edad</label>
-                    <select id="age-range" class="form-select w-full p-2">
-                        <option value="" selected disabled>Selecciona tu edad</option>
-                        <option value="18-25">18-25 años</option>
-                        <option value="26-35">26-35 años</option>
-                        <option value="36-45">36-45 años</option>
-                        <option value="46-55">46-55 años</option>
-                        <option value="56+">56 años o más</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="gender-selector" class="block text-sm font-bold text-[var(--color-primary)] mb-2">Género</label>
-                    <select id="gender-selector" class="form-select w-full p-2">
-                        <option value="" selected disabled>Selecciona tu género</option>
-                        <option value="Masculino">Masculino</option>
-                        <option value="Femenino">Femenino</option>
-                        <option value="Otro">Otro</option>
-                    </select>
+            <section class="mt-8 mb-4 px-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                        <label for="age-range" class="form-label">Rango de Edad</label>
+                        <select id="age-range" class="form-select w-full p-2">
+                            <option value="" selected disabled>Selecciona tu edad...</option>
+                            <option value="18-25">18-25 años</option>
+                            <option value="26-35">26-35 años</option>
+                            <option value="36-45">36-45 años</option>
+                            <option value="46-55">46-55 años</option>
+                            <option value="56+">56+ años</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="gender" class="form-label">Género</label>
+                        <select id="gender" class="form-select w-full p-2">
+                           <option value="" selected disabled>Selecciona tu género...</option>
+                           <option value="Masculino">Masculino</option>
+                           <option value="Femenino">Femenino</option>
+                           <option value="Otro">Otro</option>
+                           <option value="Prefiero no decir">Prefiero no decir</option>
+                        </select>
+                    </div>
                 </div>
             </section>
-
+            
             <footer class="text-center mt-8">
                 <div class="mb-6"><h3 class="aspect-label text-2xl">Puntuación Total</h3><p id="total-score" class="app-title text-4xl sm:text-5xl" style="text-shadow: none;">50</p><p id="qualitative-score" class="text-lg mt-1 h-6"></p></div>
                 <button id="submit-button" class="bg-[var(--color-primary)] text-[var(--color-text-dark)] font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#a17e47] transition-colors duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed">Enviar Cata</button>
+                 <div class="mt-8">
+                    <p class="text-white font-normal text-base">~ Pradu Services ~</p>
+                </div>
             </footer>
-             <div class="text-center mt-6 pb-2">
-                 <p class="text-sm text-white">~ Pradu Services ~</p>
-            </div>
         </div>
     </div>
     
@@ -545,29 +593,18 @@
         const totalScoreEl = document.getElementById('total-score');
         const qualitativeScoreEl = document.getElementById('qualitative-score');
         const tastingNotes = document.getElementById('tasting-notes');
-        const descriptorTagsContainer = document.getElementById('descriptor-tags');
         
+        const contextButtonsContainer = document.getElementById('context-buttons');
+        contextButtonsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('context-button')) {
+                e.target.classList.toggle('active');
+            }
+        });
+
         const wineColorsHSL = {
             Blanco: { h: 50,  s: 70, l_start: 90, l_end: 70 },
             Rosado: { h: 350, s: 80, l_start: 85, l_end: 65 }
         };
-
-        const descriptors = {
-            Tinto: ['Frutos Rojos', 'Frutos Negros', 'Especias', 'Madera', 'Vainilla', 'Cuero', 'Terroso'],
-            Blanco: ['Cítricos', 'Fruta de Hueso', 'Tropical', 'Floral', 'Mineral', 'Mantequilla', 'Fresco'],
-            Rosado: ['Frutilla', 'Cereza', 'Floral', 'Cítrico', 'Refrescante', 'Seco']
-        };
-
-        function populateDescriptors(wineType) {
-            descriptorTagsContainer.innerHTML = '';
-            (descriptors[wineType] || []).forEach(tagText => {
-                const tag = document.createElement('span');
-                tag.className = 'descriptor-tag';
-                tag.textContent = tagText;
-                tag.addEventListener('click', () => { tastingNotes.value += (tastingNotes.value ? ', ' : '') + tagText; });
-                descriptorTagsContainer.appendChild(tag);
-            });
-        }
         
         const updateSliderVisuals = (slider) => {
             const value = parseInt(slider.value);
@@ -612,7 +649,7 @@
         const calculateTotalScore = () => {
             let total = 0;
             sliders.forEach(s => total += parseInt(s.value));
-            const average = Math.round(total / sliders.length);
+            const average = sliders.length > 0 ? Math.round(total / sliders.length) : 0;
             totalScoreEl.textContent = average;
             qualitativeScoreEl.textContent = (score => {
                 if (score >= 95) return "Excepcional"; if (score >= 90) return "Excelente";
@@ -656,7 +693,6 @@
                 try {
                     const selectedWine = JSON.parse(e.target.value);
                     currentWineType = selectedWine.type;
-                    populateDescriptors(currentWineType);
                     sliders.forEach(updateSliderVisuals);
                 } catch (error) {
                     console.error('Error al procesar datos del vino:', error);
@@ -666,28 +702,16 @@
 
         // --- LÓGICA DE ENVÍO A GOOGLE SHEETS ---
         const submitButton = document.getElementById('submit-button');
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxGzncarHQyEds40bZYcnlZQQr1yr5VgJmYJzvpOEaYsqL1k--UYNEFqCF8t855qivOyg/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzshzvdahRhBcpujgMhxDK6mYzV5SpOzVyHKh_buMG8vsWaHoPJr1oO_DxBEtJVPanp/exec';
                             
         submitButton.addEventListener('click', async () => {
             const phoneNumber = document.getElementById('phone-number').value.trim();
-            const ageRange = document.getElementById('age-range').value;
-            const gender = document.getElementById('gender-selector').value;
             const selectedWineValue = wineSelector.value;
+            const ageRange = document.getElementById('age-range').value;
+            const gender = document.getElementById('gender').value;
             
-            if (!phoneNumber) {
-                showNotification('error', 'Faltan datos', 'Por favor, ingresa tu número de teléfono para continuar.');
-                return;
-            }
-            if (!ageRange) {
-                showNotification('error', 'Faltan datos', 'Por favor, selecciona tu rango de edad.');
-                return;
-            }
-            if (!gender) {
-                showNotification('error', 'Faltan datos', 'Por favor, selecciona tu género.');
-                return;
-            }
-            if (!selectedWineValue) {
-                showNotification('error', 'Faltan datos', 'Por favor, selecciona un vino de la lista.');
+            if (!phoneNumber || !selectedWineValue || !ageRange || !gender) {
+                showNotification('error', 'Faltan datos', 'Por favor, completa todos los campos para continuar.');
                 return;
             }
         
@@ -702,23 +726,34 @@
                     scores[aspect] = parseInt(slider.value);
                 });
 
+                const selectedContexts = Array.from(contextButtonsContainer.querySelectorAll('.context-button.active'))
+                                .map(btn => btn.textContent)
+                                .join(', ');
+
+                const pairingSlider = document.getElementById('pairing-slider');
+                const getPairingValue = (value) => {
+                    if (value < 33) return 'Comida';
+                    if (value > 67) return 'Copa';
+                    return 'Ambos';
+                };
+                const pairingValue = getPairingValue(pairingSlider.value);
+
                 const tastingData = {
                     phone: phoneNumber,
-                    age: ageRange,
-                    gender: gender,
                     wineName: selectedWine.name,
                     winery: selectedWine.winery,
                     vintage: selectedWine.vintage,
                     wineType: selectedWine.type,
-                    aroma: scores.aroma,
+                    precioCalidad: scores['precio-calidad'],
                     sabor: scores.sabor,
-                    sensacion: scores.sensacion,
-                    acidoDulce: scores['acido-dulce'],
-                    satisfaccion: scores.satisfaccion,
+                    aroma: scores.aroma,
+                    presentacion: scores.presentacion,
                     totalScore: calculateTotalScore(),
-                    context: document.querySelector('input[name="context"]:checked')?.value || 'No especificado',
-                    pairing: document.querySelector('input[name="pairing"]:checked')?.value || 'No especificado',
+                    context: selectedContexts || 'No especificado',
+                    pairing: pairingValue,
                     notes: tastingNotes.value.trim(),
+                    age: ageRange,
+                    gender: gender,
                     createdAt: new Date().toLocaleString("es-AR")
                 };
                 
@@ -736,11 +771,12 @@
                     showNotification('success', '¡Cata Enviada!', 'Muchas gracias por participar. Tus resultados han sido enviados.');
                     
                     document.getElementById('phone-number').value = '';
-                    document.getElementById('age-range').value = '';
-                    document.getElementById('gender-selector').value = '';
                     wineSelector.value = '';
                     tastingNotes.value = '';
-                    document.querySelectorAll('input[name="context"], input[name="pairing"]').forEach(radio => radio.checked = false);
+                    document.getElementById('age-range').value = '';
+                    document.getElementById('gender').value = '';
+                    document.querySelectorAll('.context-button').forEach(btn => btn.classList.remove('active'));
+                    document.getElementById('pairing-slider').value = 50;
                     sliders.forEach(slider => { 
                         slider.value = 50;
                         updateSliderVisuals(slider);
@@ -794,11 +830,9 @@
         (() => {
             sliders.forEach(updateSliderVisuals);
             calculateTotalScore();
-            populateDescriptors(currentWineType);
         })();
 
     </script>
 </body>
 </html>
-
 
