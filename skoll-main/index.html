@@ -49,121 +49,14 @@
         /* ==========================================================================
            2. ESTILOS DE LA PANTALLA DE INICIO (LANDING)
            ========================================================================== */
-        #landing-screen {
-            display: flex;
-            height: 100vh;
-            padding: 1rem;
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            box-sizing: border-box;
-        }
         
-        .landing-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-evenly;
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-
-        .logo {
-            width: 30vh;
-            max-width: 220px;
-            min-width: 150px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
-        }
-
-        .landing-title {
-            font-size: clamp(1.8rem, 5vh, 2.5rem); /* Achicado para mejor vista en celular */
-            line-height: 1.2;
-            text-align: center;
-        }
-        
-        .button-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5vh;
-            width: 100%;
-        }
-
-        .bottle-button {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 90vw;
-            max-width: 600px;
-            height: 30vh; /* Achicado para celular */
-            max-height: 220px; /* Achicado para celular */
-            cursor: pointer;
-            transition: transform 0.3s ease-out;
-            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.5));
-        }
-        .bottle-button:hover {
-            transform: scale(1.03);
-            filter: drop-shadow(0 14px 28px rgba(0,0,0,0.6));
-        }
-
-        .bottle-svg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 115%; /* Ajustado para el nuevo tamaño del botón */
-            height: 115%; /* Ajustado para el nuevo tamaño del botón */
-            transform-origin: center;
-            transform: translate(-50%, -50%) rotate(90deg);
-        }
-
-        .bottle-outline {
-            stroke: var(--color-primary);
-            stroke-width: 8; 
-            fill: rgba(0,0,0,0.4);
-            transition: fill 0.3s;
-        }
-        .bottle-fill {
-            fill: url(#wineFillGradient);
-            transform-origin: left;
-            transform: scaleX(0);
-            transition: transform 0.4s ease-in-out;
-        }
-        .bottle-button:hover .bottle-fill { transform: scaleX(1); }
-        .bottle-gloss {
-            fill: rgba(255, 255, 255, 0.15);
-            opacity: 0.5;
-            transition: opacity 0.4s ease;
-        }
-        .bottle-button:hover .bottle-gloss { opacity: 1; }
-
-        .button-text {
-            position: relative;
-            z-index: 10;
-            color: var(--color-text-primary);
-            font-family: var(--font-display);
-            font-size: clamp(0.9rem, 3vh, 1.4rem); /* Achicado para que no se salga del botón */
-            font-weight: 700;
-            white-space: nowrap;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            transition: color 0.3s ease;
-        }
-        .bottle-button:hover .button-text { color: var(--color-text-dark); }
-
-        @media (min-width: 768px) and (min-height: 600px) {
-            .landing-container { justify-content: center; gap: 5vh; }
-            .button-container { flex-direction: row; gap: 2rem; }
-            .bottle-button { width: 45vw; max-width: 450px; height: 30vh; max-height: 220px; }
-        }
-
-
         /* ==========================================================================
            3. ESTILOS DE LA PANTALLA DE CATA (TASTING)
            ========================================================================== */
         #tasting-screen {
             min-height: 100vh;
-            display: none;
-            align-items: center;
+            display: flex;
+            align-items: flex-start;
             justify-content: center;
             padding: 2rem 1rem;
             transition: opacity 0.5s ease-in, transform 0.5s ease-in;
@@ -180,6 +73,11 @@
         .aspect-label {
             font-family: var(--font-display);
             color: var(--color-primary);
+        }
+        .bottle-outline {
+            stroke: var(--color-primary);
+            stroke-width: 8;
+            fill: none;
         }
         .form-input, .form-radio, .form-select {
             background-color: #4a3e35;
@@ -412,40 +310,13 @@
         </defs>
     </svg>
 
-    <div id="landing-screen">
-        <div class="landing-container">
-            <img src="logoskol.jpg" alt="Logo Sköl Vinoteca" class="logo">
-            <h1 class="app-title landing-title">Bienvenido a la cata<br>de Sköl</h1>
-            <div class="button-container">
-                <a href="#" id="start-tasting-button" class="bottle-button">
-                    <svg class="bottle-svg" viewBox="0 0 140 400">
-                        <use href="#new-bottle-path" class="bottle-fill" clip-path="url(#new-bottle-clip)"/>
-                        <use href="#new-bottle-path" class="bottle-outline"/>
-                        <use href="#bottle-gloss-path" class="bottle-gloss" />
-                    </svg>
-                    <span class="button-text">Catá nuestro vino!</span>
-                </a>
-            </div>
-            <div class="absolute bottom-4">
-                <p class="text-white font-normal text-base">~ Pradu Services ~</p>
-            </div>
-        </div>
-    </div>
-
     <div id="tasting-screen">
          <div class="survey-card p-4 sm:p-6 md:p-10">
-            <button id="back-to-home" title="Volver al inicio">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            </button>
             <header class="text-center mb-6 pt-12 sm:pt-0">
-                <h1 class="app-title text-3xl sm:text-4xl">Ficha de Cata Sköl</h1>
+                <img src="logoskol.jpg" alt="Logo Sköl Vinoteca" class="logo mx-auto mb-4 w-24 sm:w-32">
+                <h1 class="app-title text-3xl sm:text-4xl">Bienvenido a la cata<br>de Sköl</h1>
                 <p class="text-base sm:text-lg mt-2">Evalúe los siguientes aspectos del vino</p>
             </header>
-            
-            <section class="mb-8 px-4 text-center">
-                <label for="phone-number" class="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Dejá tu número para guardar tu cata, ¡y participar por premios!</label>
-                <input type="tel" id="phone-number" name="phone" class="form-input w-full max-w-xs mx-auto block p-2 text-center" placeholder="Tu número de teléfono">
-            </section>
             
             <section class="mb-8">
                 <div>
@@ -542,6 +413,10 @@
             
             <footer class="text-center mt-8">
                 <div class="mb-6"><h3 class="aspect-label text-2xl">Puntuación Total</h3><p id="total-score" class="app-title text-4xl sm:text-5xl" style="text-shadow: none;">50</p><p id="qualitative-score" class="text-lg mt-1 h-6"></p></div>
+                <section class="my-6 px-4 text-center">
+                    <label for="phone-number" class="block text-sm font-medium text-[var(--color-text-primary)] mb-2">Dejá tu número para guardar tu cata, ¡y participar por premios!</label>
+                    <input type="tel" id="phone-number" name="phone" class="form-input w-full max-w-xs mx-auto block p-2 text-center" placeholder="Tu número de teléfono">
+                </section>
                 <button id="submit-button" class="bg-[var(--color-primary)] text-[var(--color-text-dark)] font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#a17e47] transition-colors duration-300 text-lg disabled:opacity-50 disabled:cursor-not-allowed">Enviar Cata</button>
                  <div class="mt-8">
                     <p class="text-white font-normal text-base">~ Pradu Services ~</p>
@@ -560,32 +435,6 @@
     </div>
 
     <script type="module">
-        // --- NAVEGACIÓN ENTRE PANTALLAS ---
-        const landingScreen = document.getElementById('landing-screen');
-        const tastingScreen = document.getElementById('tasting-screen');
-        const startTastingButton = document.getElementById('start-tasting-button');
-        const backToHomeButton = document.getElementById('back-to-home');
-
-        function showScreen(screenToShow) {
-            const screenToHide = (screenToShow === landingScreen) ? tastingScreen : landingScreen;
-            
-            screenToHide.classList.add('hidden');
-            setTimeout(() => {
-                screenToHide.style.display = 'none';
-                screenToShow.style.display = 'flex';
-                setTimeout(() => screenToShow.classList.remove('hidden'), 20);
-            }, 500);
-        }
-        
-        startTastingButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            showScreen(tastingScreen);
-        });
-        
-        backToHomeButton.addEventListener('click', () => {
-            showScreen(landingScreen);
-        });
-
         // --- LÓGICA DE LA FICHA DE CATA ---
         let currentWineType = 'Tinto';
 
@@ -622,9 +471,9 @@
 
                 let newFillColor;
                 if (currentWineType === 'Tinto') {
-                    const violet = { h: 280, s: 60, l: 40 };
-                    const wineRed = { h: 360, s: 55, l: 30 };
-                    const intenseRed = { h: 360, s: 70, l: 45 };
+                    const violet = { h: 280, s: 55, l: 35 };
+                    const wineRed = { h: 360, s: 50, l: 30 };
+                    const intenseRed = { h: 360, s: 60, l: 35 };
 
                     if (value <= 50) {
                         const t = value / 50;
@@ -641,7 +490,7 @@
                     }
                 }
                 if (newFillColor) {
-                    fillEl.style.fill = newFillColor;
+                    fillEl.setAttribute('fill', newFillColor);
                 }
             }
         };
@@ -787,7 +636,6 @@
                         if(!notificationModal.classList.contains('hidden')) {
                            notificationModal.classList.add('hidden');
                         }
-                        showScreen(landingScreen);
                     }, 3000);
                 } else {
                      throw new Error(result.error || 'La respuesta del servidor no fue exitosa. Revisa los permisos del script.');
@@ -835,7 +683,6 @@
     </script>
 </body>
 </html>
-
 
 
 
